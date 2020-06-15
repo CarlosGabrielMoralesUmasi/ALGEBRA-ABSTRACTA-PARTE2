@@ -1,0 +1,227 @@
+
+#include <iostream>
+#include <math.h>
+#include <time.h>
+#include <vector>
+#include <stdio.h>
+#include <string>
+
+using namespace std;
+class RSA
+{
+    int clave_a, clave_b, d, e, p, q, N, oN;
+    string word_c;
+    string word;
+    string alfabeto;
+public:
+    RSA();
+    RSA(int, int);
+    void generar_claves(int*, int*);
+    string cifrar(string);
+    string descifrar(int[]);
+    int exponen_mod(int x, int y, int z);
+    int rand_prim(int a);
+    int digitos(int a);
+};
+RSA::RSA()
+{
+    alfabeto = " abcdefghijklmnopqrstuvwxyz";
+}
+RSA::RSA(int clave, int clave_)
+{
+    clave_a = clave;
+    clave_b = clave_;
+    alfabeto = " abcdefghijklmnopqrstuvwxyz";
+}
+void RSA::generar_claves(int *clave_a, int *clave_b)
+{
+    p = rand_prim(1009);
+    q = rand_prim(1000);
+    //p = 17;
+    //q = 43;
+    N = p*q;
+    oN = (p-1)*(q-1);
+    e = rand_prim(N);
+    //e = 101;
+    d = inversa(e, oN);//731
+    //d = 731;
+    //17,43
+    cout << "p:" << p << ", q:" << q << ", oN:" << oN << ", N:" << N << ", e:" << e << ", d:" << d << endl << endl;
+    cout << "Clave Pública: (" << N << "," << e << ")" << endl;
+    cout << "Clave Privada: (" << N << "," << d << ")" << endl;
+}
+
+string RSA::cifrar(string word)
+{
+    string cip;
+    int exp;
+    int pos;
+    string esp = " ";
+    generar_claves(&clave_a, &clave_b);
+    for (int i = 0; i < word.length(); i++)
+    {
+        pos = alfabeto.find(word[i]);
+        exp = exponen_mod(pos, e, d);
+        word_c += to_string(exp);
+        word_c.push_back(esp[0]);
+    }
+    return word_c;
+}
+
+string RSA::descifrar(int word_c[])
+{
+    string word_d;
+    /*int a = 173;
+    int b = 731;*/
+    int q;
+    int tam = (sizeof(word_c))/sizeof(word_c[0]);
+    for (int i = 0; i < tam; i++)
+    {
+        q = exponen_mod(word_c[i], clave_a, clave_b);
+        word_d += alfabeto[q];
+    }
+    return word_d;
+}
+/*int RSA::random(int i)
+{
+    int a;
+    srand(time(NULL));
+    a = 1 + rand() % i;
+    return a;
+}
+int RSA::mod(int a, int b)
+{
+    int resto = a - ((a/b)*b);
+    if (resto < 0)
+    {
+        resto = b + resto;
+    }
+    return resto;
+}
+bool RSA::primo(int a)
+{
+    bool primo = true;
+    for (int i = 2; i < a; i++)
+    {
+        if( mod(a,i) == 0)
+        {
+            primo = false;
+        }
+    }
+    return primo;
+}
+int RSA::euclides(int a, int b)
+{
+    int r = mod(a, b);
+    if (r == 0)
+    {
+        return b;
+    }
+    if (r > b/2)
+    {
+        r = b - r;
+    }
+    a = b;
+    b = r;
+    return euclides(a, b);
+}
+int RSA::euclides_extendido(int a, int b, int *x, int *y)
+{
+    int r = mod(a, b);
+    if (r == 0)
+    {
+        *x = 0;
+        *y = 1;
+        return b;
+    }
+    a = b;
+    b = r;
+    int x1, y1;
+    int mcd = euclides_extendido(a, b, &x1, &y1);
+    *x = y1 - (a/b) * x1;
+    *y = x1;
+    return mcd;
+}
+int RSA::inversa(int a, int b)
+{
+    int x, y;
+    int res;
+    euclides_extendido(a, b, &x, &y);
+    res = mod((mod(x, b) + b), b);
+    
+    return res;
+}
+int RSA::rand_prim(int a)
+{
+    int p, b;
+    vector<int> criba;
+    for (int i = 2; i <= a; i++)
+    {
+        if (primo(i) == true)
+        {
+            criba.push_back(i);
+        }
+    }
+    p = random(criba.size());
+    b = criba[p];
+    return b;
+}
+int RSA::exponen_mod(int x, int y, int z)
+{
+    int res = 1;
+    x = mod(x, z);
+    if (x == 0)
+        return 0;
+    while (y > 0)
+    {
+        if (mod(y, 2)== 1)
+            res = mod((res*x), z);
+        y = y / 2;
+        x = mod((x*x), z);
+    }
+    return res;
+}
+int RSA::digitos(int a)
+{
+    int cifras = 1;
+        while (a >= 10)
+        {
+            a /= 10;
+            cifras++;
+        }
+    return cifras;
+}*//*
+
+void descifrar()
+{
+    int a,b,variable;
+    int array[variable];
+    cout << "Cúantas variables usará?: ";
+    cin >> variable;
+    cout << "Ingrese las variables: " << endl;;
+    for (int i = 0; i < variable; i++)
+    {
+        cout << "Variable nro " << i+1 << ": ";
+        cin >> array[i];
+    }
+    cout << "Ingrese las claves públicas: \n1ra: ";
+    cin >> a;
+    cout << "\n2da: ";
+    cin >> b;
+    //173;731
+    RSA Q(a,b);
+    cout << Q.descifrar(array) << endl;
+}
+*/
+int main(int argc, const char * argv[])
+{
+    string z = "ti";
+    int descr[] = {158,246};
+    
+    RSA P;
+    cout << P.cifrar(z) << endl;
+    
+    cout << endl << endl;
+    descifrar();
+    return 0;
+}
