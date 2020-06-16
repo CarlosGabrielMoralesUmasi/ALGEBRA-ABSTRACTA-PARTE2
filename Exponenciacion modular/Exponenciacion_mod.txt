@@ -1,0 +1,25 @@
+for(int i=0; i<mensaje.length();i++){
+  pos_letra=alfabeto.find(mensaje[i]);
+  cout<<"\npos letra: "<<pos_letra<<endl;
+  while(a==true){
+    if(e>=0){
+    if(e%2==1){
+      if(e==prob){
+        pos_letra_cifrada=resto(pow(pos_letra,1),N);
+        piv=resto(pos_letra_cifrada*piv,N);
+      }
+      else{
+        pos_letra_cifrada=resto(pow(pos_letra_cifrada,2),N);
+        piv=resto(pos_letra_cifrada*piv,N);
+      }
+    }
+    else if(e%2==0){
+      pos_letra_cifrada=resto(pow(pos_letra_cifrada,2),N);
+    }
+    e=e/2;
+    potenciador=potenciador*2;
+    }
+    if((e-1)==-1){
+      break;
+    }
+  }
