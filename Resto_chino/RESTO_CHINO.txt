@@ -1,0 +1,103 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+
+int mod(int a, int b)
+{
+    int resto = a - ((a/b)*b);
+    if (resto < 0)
+    {
+        resto = b + resto;
+    }
+    return resto;
+}
+bool primos(int pn)
+{
+    for (int i = 2; i < pn; i++)
+    {
+        if( mod(pn, i) == 0)
+        {
+            return false;
+        }
+    }
+    return true;
+}
+int euclides_extendido(int a, int b, int *x, int *y)
+{
+    int r = mod(a, b);
+    if (r == 0)
+    {
+        *x = 0;
+        *y = 1;
+        return b;
+    }
+    a = b;
+    b = r;
+    int x1, y1;
+    int mcd = euclides_extendido(a, b, &x1, &y1);
+    *x = y1 - (a/b) * x1;
+    *y = x1;
+    return mcd;
+}
+int inversa(int a, int b)
+{
+    int x, y;
+    int res;
+    euclides_extendido(a, b, &x, &y);
+    res = mod((mod(x, b) + b), b);
+    
+    return res;
+}
+bool verificar(int pn[], int tam)
+{
+    for (int i = 0; i < tam; i++)
+    {
+        if (primos(pn[i]) == false)
+            return false;
+    }
+    return true;
+}
+int ecuación(int pn[], int an[], int tam)
+{
+    int P, Pi[tam],qi[tam], X;
+    X = 0; P = 1;
+    for (int i = 0; i < tam; i++)
+    {
+        P *= pn[i];
+    }
+    for (int i = 0; i < tam; i++)
+    {
+        Pi[i] = P / pn[i];
+        qi[i] = inversa(Pi[i], pn[i]);
+        X += an[i] * Pi[i] * qi[i];
+    }
+    cout << "\nX = " << mod(X, P) << " + " << P << ".K\n"<< endl;
+    return mod(X, P);
+}
+void resto_chino(int pn[], int an[], int tam)
+{
+    if (verificar(pn, tam) == true)
+        cout << ecuación(pn, an, tam) << endl;
+    else
+        cout << "\nLos números en pn no son primos entre si.\n" << endl;
+}
+int main(int argc, const char * argv[])
+{
+    //int an[] = {2, 3, 2};
+    //int pn[] = {3, 5, 7};
+    //int tam = sizeof(pn)/sizeof(pn[0]);
+    int tam;
+    cout << "Ingrese el número de ecuaciones: ";
+    cin >> tam;
+    int pn[tam], an[tam];
+    cout << "\n\nIngrese los números:\n";
+    for (int i = 0; i < tam; i++)
+    {
+        cin >> an[i];
+        cin >> pn[i];
+    }
+    resto_chino(pn, an, tam);
+    return 0;
+}
